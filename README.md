@@ -27,3 +27,5 @@ Spring (Boot + MVC).
 - Через терминал перейти в папку проекта и запустить его двумя командами : "mvn clean install", затем "mvn spring-boot:run";
 
 Если у Вас есть вопросы или предложения, вы можете связаться со мной по электронной почте: **loganxmen97@gmail.com**
+
+![build status](https://github.com/XLoganxmenX/job4j_social_media_api/workflows/maven.yml/badge.svg)
