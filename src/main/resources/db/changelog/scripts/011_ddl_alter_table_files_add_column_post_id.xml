@@ -7,7 +7,7 @@
     <changeSet id="011" author="loganxmen">
         <addColumn tableName="files">
             <column name="post_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_POST_ID" referencedTableName="posts" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_FILES_POST_ID" referencedTableName="posts" referencedColumnNames="id"/>
             </column>
         </addColumn>
     </changeSet>

@@ -19,7 +19,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_POSTS_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
             </column>
         </createTable>
     </changeSet>

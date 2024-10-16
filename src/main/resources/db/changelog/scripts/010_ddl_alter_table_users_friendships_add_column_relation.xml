@@ -7,7 +7,7 @@
     <changeSet id="010" author="loganxmen">
         <addColumn tableName="users_friendships">
             <column name="relation_type_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_RELATION_TYPE_ID" referencedTableName="relation_types" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_USERS_FRIENDSHIPS_RELATION_TYPE_ID" referencedTableName="relation_types" referencedColumnNames="id"/>
             </column>
         </addColumn>
     </changeSet>

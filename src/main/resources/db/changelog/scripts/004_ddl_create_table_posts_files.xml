@@ -7,10 +7,10 @@
     <changeSet id="004" author="loganxmen">
         <createTable tableName="posts_files">
             <column name="post_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_POST_ID" referencedTableName="posts" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_POSTS_FILES_POST_ID" referencedTableName="posts" referencedColumnNames="id"/>
             </column>
             <column name="file_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_FILE_ID" referencedTableName="files" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_POSTS_FILES_FILE_ID" referencedTableName="files" referencedColumnNames="id"/>
             </column>
         </createTable>
     </changeSet>

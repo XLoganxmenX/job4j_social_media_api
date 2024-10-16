@@ -10,10 +10,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="from_user_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_FROM_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_MESSAGES_FROM_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="to_user_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_TO_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_MESSAGES_TO_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="message" type="text">
                 <constraints nullable="false"/>

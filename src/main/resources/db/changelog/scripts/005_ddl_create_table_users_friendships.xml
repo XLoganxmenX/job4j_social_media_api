@@ -10,10 +10,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_USERS_FRIENDSHIPS_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="friend_user_id" type="int">
-                <constraints nullable="false" foreignKeyName="FK_FRIEND_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
+                <constraints nullable="false" foreignKeyName="FK_USERS_FRIENDSHIPS_FRIEND_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
             </column>
         </createTable>
 
