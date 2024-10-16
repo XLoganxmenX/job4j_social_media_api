@@ -1,0 +1,18 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="004" author="loganxmen">
+        <createTable tableName="posts_files">
+            <column name="post_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_POST_ID" referencedTableName="posts" referencedColumnNames="id"/>
+            </column>
+            <column name="file_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_FILE_ID" referencedTableName="files" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

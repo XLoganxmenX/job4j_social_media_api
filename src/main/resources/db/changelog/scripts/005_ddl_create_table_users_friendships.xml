@@ -1,0 +1,23 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="005" author="loganxmen">
+        <createTable tableName="users_friendships">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+            <column name="friend_user_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_FRIEND_USER_ID" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint columnNames="user_id, friend_user_id" tableName="users_friendships" constraintName="UK_USERID_FRIEND_USERID"/>
+    </changeSet>
+
+</databaseChangeLog>

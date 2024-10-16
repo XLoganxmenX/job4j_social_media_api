@@ -1,0 +1,15 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="010" author="loganxmen">
+        <addColumn tableName="users_friendships">
+            <column name="relation_type_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_RELATION_TYPE_ID" referencedTableName="relation_types" referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
