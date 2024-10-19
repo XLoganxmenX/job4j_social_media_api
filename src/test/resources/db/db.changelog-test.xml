@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <include file="changelog/scripts/001_ddl_create_table_users.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/002_ddl_create_table_posts.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/003_ddl_create_table_files.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/004_ddl_create_table_posts_files.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/005_ddl_create_table_users_friendships.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/006_ddl_create_table_messages.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/007_ddl_alter_table_users_add_column_timezone.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/008_ddl_drop_table_posts_files.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/009_ddl_create_table_relation_types.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/010_ddl_alter_table_users_friendships_add_column_relation.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/011_ddl_alter_table_files_add_column_post_id.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

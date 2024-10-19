@@ -27,7 +27,6 @@ public class User {
 
     private String timezone = "UTC";
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRelate> userRelates = new HashSet<>();
 }
