@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.socialmediaapi.model.File;
 
 import java.util.List;
@@ -38,11 +39,13 @@ class FileRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void whenSaveFileAndDeleteThenNotFound() {
         var file = new File(0, "file", "path");
         fileRepository.save(file);
-        fileRepository.deleteById(file.getId());
+        var deletedRows = fileRepository.deleteFileById(file.getId());
         var actualFile = fileRepository.findById(file.getId());
+        assertThat(deletedRows).isEqualTo(1);
         assertThat(actualFile).isEmpty();
         assertThat(fileRepository.findAll()).isEmpty();
     }
@@ -75,4 +78,5 @@ class FileRepositoryTest {
         var actualFiles = fileRepository.findAll();
         assertThat(actualFiles).isEmpty();
     }
+
 }
