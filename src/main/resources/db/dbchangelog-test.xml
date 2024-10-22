@@ -16,4 +16,5 @@
     <include file="changelog/scripts/009_ddl_create_table_relation_types.xml" relativeToChangelogFile="true"/>
     <include file="changelog/scripts/010_ddl_alter_table_users_friendships_add_column_relation.xml" relativeToChangelogFile="true"/>
     <include file="changelog/scripts/011_ddl_alter_table_files_add_column_post_id.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/scripts/012_ddl_alter_table_files_rename_post_photos.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

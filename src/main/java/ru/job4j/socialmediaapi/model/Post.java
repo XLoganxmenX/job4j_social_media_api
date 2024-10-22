@@ -33,5 +33,5 @@ public class Post {
 
     @OneToMany
     @JoinColumn(name = "post_id")
-    private List<File> files = new ArrayList<>();
+    private List<PostPhoto> postPhotos = new ArrayList<>();
 }

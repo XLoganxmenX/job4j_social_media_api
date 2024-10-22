@@ -4,15 +4,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
-import ru.job4j.socialmediaapi.model.File;
+import ru.job4j.socialmediaapi.model.PostPhoto;
 
-public interface FileRepository extends ListCrudRepository<File, Integer> {
+public interface PostPhotoRepository extends ListCrudRepository<PostPhoto, Integer> {
 
 
     @Modifying(clearAutomatically = true)
     @Query("""
-           delete from File f
-           where f.id = :fileId
+           delete from PostPhoto f
+           where f.id = :postPhotoId
            """)
-    int deleteFileById(@Param("fileId") int fileId);
+    int deletePostPhotoById(@Param("postPhotoId") int postPhotoId);
 }

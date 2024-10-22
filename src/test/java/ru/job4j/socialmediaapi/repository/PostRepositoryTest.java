@@ -80,7 +80,7 @@ class PostRepositoryTest {
         var actualPosts = postRepository.findAll();
         assertThat(actualPosts).hasSize(2);
         assertThat(actualPosts).usingRecursiveComparison()
-                .ignoringFields("user", "created", "files")
+                .ignoringFields("user", "created", "postPhotos")
                 .isEqualTo(expectedPosts);
     }
 
@@ -124,7 +124,7 @@ class PostRepositoryTest {
         var actualUserPosts = postRepository.findByUser(user);
         assertThat(actualUserPosts).hasSize(2);
         assertThat(actualUserPosts).usingRecursiveComparison()
-                .ignoringFields("user", "created", "files")
+                .ignoringFields("user", "created", "postPhotos")
                 .isEqualTo(expectedPosts);
     }
 
@@ -149,7 +149,7 @@ class PostRepositoryTest {
         var actualUserPosts = postRepository.findByCreatedBetween(today.minusDays(30), today);
         assertThat(actualUserPosts).hasSize(3);
         assertThat(actualUserPosts).usingRecursiveComparison()
-                .ignoringFields("user", "created", "files")
+                .ignoringFields("user", "created", "postPhotos")
                 .isEqualTo(expectedPosts);
     }
 
@@ -168,7 +168,7 @@ class PostRepositoryTest {
 
         var actualUserPosts = postRepository.findByOrderByCreatedDesc(PageRequest.of(0, 3)).getContent();
         assertThat(actualUserPosts).usingRecursiveComparison()
-                .ignoringFields("user", "created", "files")
+                .ignoringFields("user", "created", "postPhotos")
                 .isEqualTo(expectedPosts);
         assertThat(actualUserPosts).containsExactlyElementsOf(expectedPosts);
     }
