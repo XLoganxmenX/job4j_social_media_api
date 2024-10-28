@@ -11,9 +11,7 @@ import ru.job4j.socialmediaapi.model.User;
 import ru.job4j.socialmediaapi.model.UserRelate;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -145,13 +143,15 @@ class UserRepositoryTest {
         var subscriberType = relationTypeRepository.save(new RelationType(0, "subscriber"));
         var friendType = relationTypeRepository.save(new RelationType(0, "friend"));
 
-        user1.getUserRelates()
-                .add(new UserRelate(1, user1, relateUser, subscriberType));
-        user1.getUserRelates()
-                .add(new UserRelate(2, user1, relateUser, friendType));
+        user1.getUserRelates().addAll(
+                List.of(
+                        new UserRelate(0, user1, relateUser, subscriberType),
+                        new UserRelate(0, user1, relateUser, friendType)
+                )
+        );
         userRepository.save(user1);
         user2.getUserRelates()
-                .add(new UserRelate(3, user2, relateUser, subscriberType));
+                .add(new UserRelate(0, user2, relateUser, subscriberType));
         userRepository.save(user2);
 
         var subscribers = userRepository.findUsersByRelationTypeForRelatedUserWithoutType(
