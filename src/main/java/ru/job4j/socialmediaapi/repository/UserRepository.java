@@ -16,11 +16,25 @@ public interface UserRepository extends ListCrudRepository<User, Integer> {
     Optional<User> findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
 
     @Query("""
-        select ur.relatedUser from User u
-        join u.userRelates ur
-        join ur.relationType rt
-        where u.id = :userId and rt.id = :relationTypeId
+            select ur.relatedUser from User u
+            join u.userRelates ur
+            join ur.relationType rt
+            where u.id = :userId and rt.id = :relationTypeId
         """)
-    List<User> findUsersByRelationTypeForUser(@Param("userId") int userId,
-                                              @Param("relationTypeId") int relationTypeId);
+    List<User> findRelatedUsersByRelationTypeForUser(@Param("userId") int userId,
+                                                     @Param("relationTypeId") int relationTypeId);
+
+    @Query("""
+            select ur.user from User u
+            join u.userRelates ur
+            join ur.relationType rt
+            where ur.relatedUser.id = :relatedUserId and rt.id = :relationTypeId
+            and not exists (
+                    select 1 from UserRelate ur2
+                    where ur2.user.id = ur.user.id
+                      and ur2.relationType.id = :withoutTypeId)
+        """)
+    List<User> findUsersByRelationTypeForRelatedUserWithoutType(@Param("relatedUserId") int userId,
+                                                                 @Param("relationTypeId") int relationTypeId,
+                                                                 @Param("withoutTypeId") int withoutTypeId);
 }

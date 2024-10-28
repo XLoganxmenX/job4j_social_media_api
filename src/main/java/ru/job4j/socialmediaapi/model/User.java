@@ -3,7 +3,9 @@ package ru.job4j.socialmediaapi.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,5 +30,5 @@ public class User {
     private String timezone = "UTC";
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRelate> userRelates = new HashSet<>();
+    private List<UserRelate> userRelates = new ArrayList<>();
 }

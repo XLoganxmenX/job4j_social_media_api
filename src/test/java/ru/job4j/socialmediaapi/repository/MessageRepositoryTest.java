@@ -33,9 +33,9 @@ class MessageRepositoryTest {
     @Test
     public void whenSaveMessageThenFindById() {
         var user1 = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", Set.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
         var user2 = userRepository.save(
-                new User(0, "user2", "test2@test.com", "test2", "UTC", Set.of()));
+                new User(0, "user2", "test2@test.com", "test2", "UTC", List.of()));
         var message = new Message(0, user1, user2, "message", LocalDateTime.now());
         messageRepository.save(message);
         var actualMessage = messageRepository.findById(message.getId());
@@ -52,9 +52,9 @@ class MessageRepositoryTest {
     @Test
     public void whenSaveMessageAndDeleteThenNotFound() {
         var user1 = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", Set.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
         var user2 = userRepository.save(
-                new User(0, "user2", "test2@test.com", "test2", "UTC", Set.of()));
+                new User(0, "user2", "test2@test.com", "test2", "UTC", List.of()));
         var message = new Message(0, user1, user2, "message", LocalDateTime.now());
         messageRepository.save(message);
         messageRepository.deleteById(message.getId());
@@ -66,9 +66,9 @@ class MessageRepositoryTest {
     @Test
     public void whenFindAllMessagesThenGetMessagesList() {
         var user1 = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", Set.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
         var user2 = userRepository.save(
-                new User(0, "user2", "test2@test.com", "test2", "UTC", Set.of()));
+                new User(0, "user2", "test2@test.com", "test2", "UTC", List.of()));
         var message1 = messageRepository.save(new Message(0, user1, user2, "message1", LocalDateTime.now()));
         var message2 = messageRepository.save(new Message(0, user1, user2, "message2", LocalDateTime.now()));
         var expectedMessages = List.of(message1, message2);
@@ -82,9 +82,9 @@ class MessageRepositoryTest {
     @Test
     public void whenUpdateMessageAndSaveThenFindById() {
         var user1 = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", Set.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
         var user2 = userRepository.save(
-                new User(0, "user2", "test2@test.com", "test2", "UTC", Set.of()));
+                new User(0, "user2", "test2@test.com", "test2", "UTC", List.of()));
         var message = messageRepository.save(new Message(0, user1, user2, "message", LocalDateTime.now()));
         message.setMessage("new message");
         messageRepository.save(message);

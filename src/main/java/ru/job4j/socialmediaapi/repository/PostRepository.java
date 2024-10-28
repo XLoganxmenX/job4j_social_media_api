@@ -26,9 +26,9 @@ public interface PostRepository extends ListCrudRepository<Post, Integer> {
            set post.title = :title, post.description = :description
            where post.id = :id
            """)
-    int updateTitleAndDescription(@Param("title") String title,
-                                  @Param("description") String description,
-                                  @Param("id") int id);
+    int updateTitleAndDescriptionById(@Param("title") String title,
+                                      @Param("description") String description,
+                                      @Param("id") int id);
 
     @Modifying(clearAutomatically = true)
     @Query("""

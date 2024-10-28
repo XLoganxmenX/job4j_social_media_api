@@ -1,7 +1,6 @@
 package ru.job4j.socialmediaapi.repository;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import ru.job4j.socialmediaapi.model.RelationType;
 import ru.job4j.socialmediaapi.model.User;
 import ru.job4j.socialmediaapi.model.UserRelate;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +34,7 @@ class UserRepositoryTest {
 
     @Test
     public void whenSaveUserThenFindById() {
-        var user = new User(0, "user", "test@test.com", "test", "UTC", Set.of());
+        var user = new User(0, "user", "test@test.com", "test", "UTC", List.of());
         userRepository.save(user);
         var actualUser = userRepository.findById(user.getId());
         assertThat(actualUser).isPresent();
@@ -49,7 +49,7 @@ class UserRepositoryTest {
 
     @Test
     public void whenSaveUserAndDeleteThenNotFound() {
-        var user = new User(0, "user", "test@test.com", "test", "UTC", Set.of());
+        var user = new User(0, "user", "test@test.com", "test", "UTC", List.of());
         userRepository.save(user);
         userRepository.deleteById(user.getId());
         var actualUser = userRepository.findById(user.getId());
@@ -60,9 +60,9 @@ class UserRepositoryTest {
     @Test
     public void whenFindAllUsersThenGetUsersList() {
         var user1 = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", Set.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
         var user2 = userRepository.save(
-                new User(0, "user2", "test2@test.com", "test2", "UTC", Set.of()));
+                new User(0, "user2", "test2@test.com", "test2", "UTC", List.of()));
         var expectedUsers = List.of(user1, user2);
         var actualUsers = userRepository.findAll();
         assertThat(actualUsers).hasSize(2);
@@ -81,9 +81,9 @@ class UserRepositoryTest {
     @Transactional
     public void whenSaveUserWithRelateThenFindRelate() {
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", new HashSet<>()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", new ArrayList<>()));
         var relateUser = userRepository.save(
-                new User(0, "user2", "tes2t@test.com", "test2", "UTC", Set.of()));
+                new User(0, "user2", "tes2t@test.com", "test2", "UTC", List.of()));
         var friendType = relationTypeRepository.save(new RelationType(0, "friend"));
         user.getUserRelates().add(
                 new UserRelate(0, user, relateUser, friendType)
@@ -99,9 +99,9 @@ class UserRepositoryTest {
     @Test
     public void whenFindUserByEmailAndPasswordThenGetUser() {
         var user = userRepository.save(
-                new User(0, "user", "test@test.com", "test", "UTC", new HashSet<>()));
+                new User(0, "user", "test@test.com", "test", "UTC", new ArrayList<>()));
         var anotherUser = userRepository.save(
-                new User(0, "another user", "anothertest@test.com", "test", "UTC", new HashSet<>()));
+                new User(0, "another user", "anothertest@test.com", "test", "UTC", new ArrayList<>()));
         var actualUser = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
         assertThat(actualUser).isPresent();
         assertThat(actualUser.get()).usingRecursiveComparison()
@@ -111,23 +111,53 @@ class UserRepositoryTest {
 
     @Test
     @Transactional
-    public void whenFindUsersByRelationTypeForUser() {
+    public void whenFindRelatedUsersByRelationTypeForUser() {
         var user = userRepository.save(
-                new User(0, "user", "test@test.com", "test", "UTC", new HashSet<>()));
+                new User(0, "user", "test@test.com", "test", "UTC", new ArrayList<>()));
         var relateUser2 = userRepository.save(
-                new User(0, "user2", "tes2t@test.com", "test2", "UTC", Set.of()));
+                new User(0, "user2", "tes2t@test.com", "test2", "UTC", List.of()));
         var relateUser3 = userRepository.save(
-                new User(0, "user3", "tes3t@test.com", "test3", "UTC", Set.of()));
+                new User(0, "user3", "tes3t@test.com", "test3", "UTC", List.of()));
         var friendType = relationTypeRepository.save(new RelationType(0, "friend"));
+
         user.getUserRelates()
                 .add(new UserRelate(0, user, relateUser2, friendType));
         userRepository.save(user);
         user.getUserRelates()
                 .add(new UserRelate(0, user, relateUser3, friendType));
         userRepository.save(user);
-        var userFriends = userRepository.findUsersByRelationTypeForUser(user.getId(), friendType.getId());
+
+        var userFriends = userRepository.findRelatedUsersByRelationTypeForUser(user.getId(), friendType.getId());
         assertThat(userFriends).hasSize(2);
         assertThat(userFriends).containsExactlyInAnyOrder(relateUser2, relateUser3);
+        relationTypeRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    public void whenFindUsersByRelationTypeForRelatedUserWithoutType() {
+        var relateUser = userRepository.save(
+                new User(0, "relateUser", "test@test.com", "test", "UTC", new ArrayList<>()));
+        var user1 = userRepository.save(
+                new User(0, "user2", "tes2t@test.com", "test2", "UTC", new ArrayList<>()));
+        var user2 = userRepository.save(
+                new User(0, "user3", "tes3t@test.com", "test3", "UTC", new ArrayList<>()));
+        var subscriberType = relationTypeRepository.save(new RelationType(0, "subscriber"));
+        var friendType = relationTypeRepository.save(new RelationType(0, "friend"));
+
+        user1.getUserRelates()
+                .add(new UserRelate(1, user1, relateUser, subscriberType));
+        user1.getUserRelates()
+                .add(new UserRelate(2, user1, relateUser, friendType));
+        userRepository.save(user1);
+        user2.getUserRelates()
+                .add(new UserRelate(3, user2, relateUser, subscriberType));
+        userRepository.save(user2);
+
+        var subscribers = userRepository.findUsersByRelationTypeForRelatedUserWithoutType(
+                relateUser.getId(), subscriberType.getId(), friendType.getId());
+        assertThat(subscribers).hasSize(1);
+        assertThat(subscribers).containsExactlyInAnyOrder(user2);
         relationTypeRepository.deleteAll();
     }
 }

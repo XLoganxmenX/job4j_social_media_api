@@ -6,9 +6,12 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import ru.job4j.socialmediaapi.model.Post;
 import ru.job4j.socialmediaapi.model.PostPhoto;
+import ru.job4j.socialmediaapi.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -78,5 +81,4 @@ class PostPhotoRepositoryTest {
         var postPhotos = postPhotoRepository.findAll();
         assertThat(postPhotos).isEmpty();
     }
-
 }
