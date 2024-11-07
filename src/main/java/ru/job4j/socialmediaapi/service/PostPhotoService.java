@@ -11,5 +11,7 @@ public interface PostPhotoService {
 
     Optional<PostPhotoDto> getById(int id);
 
+    PostPhotoDto createPostPhotoDtoFromPostPhoto(PostPhoto postPhoto);
+
     void deletePostPhotoById(int id);
 }

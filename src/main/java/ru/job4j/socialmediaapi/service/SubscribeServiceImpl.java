@@ -5,7 +5,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.job4j.socialmediaapi.dto.UserListDto;
 import ru.job4j.socialmediaapi.enums.RelationTypeName;
+import ru.job4j.socialmediaapi.mappers.UserMapper;
 import ru.job4j.socialmediaapi.model.RelationType;
 import ru.job4j.socialmediaapi.model.User;
 import ru.job4j.socialmediaapi.model.UserRelate;
@@ -21,12 +23,17 @@ public class SubscribeServiceImpl implements SubscribeService {
     private final RelationTypeRepository relationTypeRepository;
     private final UserRepository userRepository;
 
+    private final UserMapper userMapper;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void sendRequestToFriendships(User user, int relatedUserId) throws DataAccessException {
+    public void sendRequestToFriendships(int userId, int relatedUserId)
+                                                                throws DataAccessException, NoSuchElementException {
         RelationType subscriberType = getRelationType(RelationTypeName.SUBSCRIBER);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
         User relatedUser = userRepository.findById(relatedUserId)
-                .orElseThrow(() -> new NoSuchElementException("User with id " + " not found"));
+                .orElseThrow(() -> new NoSuchElementException("User with id " + relatedUserId + " not found"));
         UserRelate newSubscriberRelate = new UserRelate(0, user, relatedUser, subscriberType);
         user.getUserRelates().add(newSubscriberRelate);
         userRepository.save(user);
@@ -39,16 +46,25 @@ public class SubscribeServiceImpl implements SubscribeService {
     }
 
     @Override
-    public List<User> getSubscribersForUser(int userId) throws DataAccessException {
+    public List<UserListDto> getSubscribersForUser(int userId)
+                                                            throws DataAccessException, NoSuchElementException {
         RelationType subscriberType = getRelationType(RelationTypeName.SUBSCRIBER);
         RelationType friendType = getRelationType(RelationTypeName.FRIEND);
         return userRepository.
-                findUsersByRelationTypeForRelatedUserWithoutType(userId, subscriberType.getId(), friendType.getId());
+                findUsersByRelationTypeForRelatedUserWithoutType(userId, subscriberType.getId(), friendType.getId())
+                .stream()
+                .map(userMapper::getUserListDtoFromUser)
+                .toList();
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void confirmFriendships(User user, User friendUser) throws DataAccessException {
+    public void confirmFriendships(int userId, int friendUserId)
+                                                            throws DataAccessException, NoSuchElementException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
+        User friendUser = userRepository.findById(friendUserId)
+                .orElseThrow(() -> new NoSuchElementException("User with id " + friendUserId + " not found"));
         RelationType subscriberType = getRelationType(RelationTypeName.SUBSCRIBER);
         RelationType friendType = getRelationType(RelationTypeName.FRIEND);
         user.getUserRelates().addAll(

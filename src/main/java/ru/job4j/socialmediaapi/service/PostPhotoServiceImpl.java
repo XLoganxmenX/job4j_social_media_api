@@ -83,6 +83,12 @@ public class PostPhotoServiceImpl implements PostPhotoService {
     }
 
     @Override
+    public PostPhotoDto createPostPhotoDtoFromPostPhoto(PostPhoto postPhoto) {
+        var content = readFileAsBytes(postPhoto.getPath());
+        return new PostPhotoDto(postPhoto.getName(), content);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void deletePostPhotoById(int id) {
         var postPhotoOptional = postPhotoRepository.findById(id);

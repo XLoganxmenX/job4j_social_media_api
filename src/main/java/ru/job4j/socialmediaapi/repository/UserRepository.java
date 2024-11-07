@@ -1,14 +1,21 @@
 package ru.job4j.socialmediaapi.repository;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.socialmediaapi.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends ListCrudRepository<User, Integer> {
+    @Modifying
+    @Transactional
+    @Query("delete from User u where u.id = :userId")
+    int delete(@Param("userId") int userId);
+
     @Query("""
             select user from User as user
             where user.email = :email and user.password = :password

@@ -2,19 +2,19 @@ package ru.job4j.socialmediaapi.service;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.job4j.socialmediaapi.dto.PostPhotoDto;
+import ru.job4j.socialmediaapi.dto.PostDto;
 import ru.job4j.socialmediaapi.model.Post;
-import ru.job4j.socialmediaapi.model.User;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface PostService {
+    Optional<PostDto> findById(int id);
 
     @Transactional(propagation = Propagation.REQUIRED)
-    Post createPost(String title, String description, User user, List<PostPhotoDto> postPhotos);
+    PostDto createPost(PostDto postDto);
 
     @Transactional(propagation = Propagation.REQUIRED)
-    void deletePostById(int id);
+    boolean deletePostById(int id);
 
     @Transactional(propagation = Propagation.REQUIRED)
     void updateTitleAndDescription(String title, String description, int id);
