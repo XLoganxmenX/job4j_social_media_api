@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class PostPhotoDto {
     private String name;
-    private byte[] content;
+    private String base64Content;
 }

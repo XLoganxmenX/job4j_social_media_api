@@ -48,7 +48,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable("id")
+                                       @NotNull
+                                       @Min(value = 1, message = "Номер ресурса должен быть больше 1")
+                                       int id) {
         if (userService.delete(id)) {
             return ResponseEntity.noContent().build();
         }

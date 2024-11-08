@@ -17,4 +17,7 @@
     <include file="scripts/010_ddl_alter_table_users_friendships_add_column_relation.xml" relativeToChangelogFile="true"/>
     <include file="scripts/011_ddl_alter_table_files_add_column_post_id.xml" relativeToChangelogFile="true"/>
     <include file="scripts/012_ddl_alter_table_files_rename_post_photos.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/013_dml_insert_table_relation_types.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/014_ddl_change_constraint_table_users_friendships.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/015_dml_drop_null_constraint_table_post_photos.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

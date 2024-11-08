@@ -12,6 +12,7 @@ import ru.job4j.socialmediaapi.repository.PostPhotoRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class PostPhotoServiceImpl implements PostPhotoService {
     @Transactional(propagation = Propagation.REQUIRED)
     private PostPhoto save(PostPhotoDto postPhotoDto) {
         var path = getNewFilePath(postPhotoDto.getName());
-        writeFileBytes(path, postPhotoDto.getContent());
+        writeFileBytes(path, decode(postPhotoDto.getBase64Content()));
         return postPhotoRepository.save(new PostPhoto(0, postPhotoDto.getName(), path));
     }
 
@@ -71,7 +72,7 @@ public class PostPhotoServiceImpl implements PostPhotoService {
             return Optional.empty();
         }
         var content = readFileAsBytes(postPhotoOptional.get().getPath());
-        return Optional.of(new PostPhotoDto(postPhotoOptional.get().getName(), content));
+        return Optional.of(new PostPhotoDto(postPhotoOptional.get().getName(), encode(content)));
     }
 
     private byte[] readFileAsBytes(String path) {
@@ -85,7 +86,7 @@ public class PostPhotoServiceImpl implements PostPhotoService {
     @Override
     public PostPhotoDto createPostPhotoDtoFromPostPhoto(PostPhoto postPhoto) {
         var content = readFileAsBytes(postPhoto.getPath());
-        return new PostPhotoDto(postPhoto.getName(), content);
+        return new PostPhotoDto(postPhoto.getName(), encode(content));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class PostPhotoServiceImpl implements PostPhotoService {
         var postPhotoOptional = postPhotoRepository.findById(id);
         if (postPhotoOptional.isPresent()) {
             deleteFile(postPhotoOptional.get().getPath());
-            postPhotoRepository.deleteById(id);
+            postPhotoRepository.deletePostPhotoById(id);
         }
     }
 
@@ -104,5 +105,13 @@ public class PostPhotoServiceImpl implements PostPhotoService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private byte[] decode(String content) {
+        return Base64.getDecoder().decode(content);
+    }
+
+    private String encode(byte[] content) {
+        return Base64.getEncoder().encodeToString(content);
     }
 }

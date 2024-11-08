@@ -18,9 +18,9 @@ public class SubscribeController {
     private final SubscribeService subscribeService;
 
     @PostMapping("/send-friend-request")
-    public ResponseEntity<Void> sendRequestToFriendships(@RequestParam int userId,
-                                                         @RequestParam int relatedUserID) {
-        subscribeService.sendRequestToFriendships(userId, relatedUserID);
+    public ResponseEntity<Void> sendRequestToFriendships(@RequestParam(name = "userId") int userId,
+                                                         @RequestParam(name = "relatedUserId") int relatedUserId) {
+        subscribeService.sendRequestToFriendships(userId, relatedUserId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -33,8 +33,8 @@ public class SubscribeController {
     }
 
     @PostMapping("/confirm-friend-request")
-    public ResponseEntity<Void> confirmFriendships(@RequestParam int userId,
-                                                   @RequestParam int friendId) {
+    public ResponseEntity<Void> confirmFriendships(@RequestParam(name = "userId") int userId,
+                                                   @RequestParam(name = "friendId") int friendId) {
         subscribeService.confirmFriendships(userId, friendId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

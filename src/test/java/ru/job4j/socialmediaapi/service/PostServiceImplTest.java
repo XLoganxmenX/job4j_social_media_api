@@ -43,7 +43,7 @@ class PostServiceImplTest {
 
     @Test
     public void whenCreatePostThenGetNewPost() {
-        var postPhotoDtos = List.of(new PostPhotoDto("photo1", new byte[10]));
+        var postPhotoDtos = List.of(new PostPhotoDto("photo1", "content"));
         var postPhotos = List.of(new PostPhoto(1, "photo1", "path"));
         var user = new User(1, "user", "test@test.com", "test", "UTC", new ArrayList<>());
         var post = new Post(
@@ -68,7 +68,7 @@ class PostServiceImplTest {
 
     @Test
     public void whenCreatePostAndGetExceptionThenThrowException() {
-        var postPhotoDtos = List.of(new PostPhotoDto("photo1", new byte[10]));
+        var postPhotoDtos = List.of(new PostPhotoDto("photo1", "content"));
         var postPhotos = List.of(new PostPhoto(1, "photo1", "path"));
         var user = new User(1, "user", "test@test.com", "test", "UTC", new ArrayList<>());
         var post = new Post(
