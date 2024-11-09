@@ -40,7 +40,10 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") int id) {
+    public ResponseEntity<Void> delete(@PathVariable("id")
+                                       @NotNull
+                                       @Min(value = 1, message = "Номер ресурса должен быть больше 0")
+                                       int id) {
         if (postService.deletePostById(id)) {
             return ResponseEntity.noContent().build();
         }

@@ -25,6 +25,7 @@ public class SubscribeController {
     }
 
     @GetMapping("/user/{userId}/subscribers")
+    @ResponseStatus(HttpStatus.OK)
     public List<UserListDto> getSubscribersForUser(@PathVariable("userId")
                                                    @NotNull
                                                    @Min(value = 1, message = "Номер ресурса должен быть больше 1")
