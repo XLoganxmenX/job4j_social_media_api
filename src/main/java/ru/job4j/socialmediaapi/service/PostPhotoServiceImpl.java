@@ -47,7 +47,7 @@ public class PostPhotoServiceImpl implements PostPhotoService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    private PostPhoto save(PostPhotoDto postPhotoDto) {
+    private PostPhoto save(PostPhotoDto postPhotoDto) throws DataAccessException {
         var path = getNewFilePath(postPhotoDto.getName());
         writeFileBytes(path, decode(postPhotoDto.getBase64Content()));
         return postPhotoRepository.save(new PostPhoto(0, postPhotoDto.getName(), path));
@@ -66,7 +66,7 @@ public class PostPhotoServiceImpl implements PostPhotoService {
     }
 
     @Override
-    public Optional<PostPhotoDto> getById(int id) {
+    public Optional<PostPhotoDto> getById(int id) throws DataAccessException {
         var postPhotoOptional = postPhotoRepository.findById(id);
         if (postPhotoOptional.isEmpty()) {
             return Optional.empty();
@@ -84,14 +84,14 @@ public class PostPhotoServiceImpl implements PostPhotoService {
     }
 
     @Override
-    public PostPhotoDto createPostPhotoDtoFromPostPhoto(PostPhoto postPhoto) {
+    public PostPhotoDto createPostPhotoDtoFromPostPhoto(PostPhoto postPhoto) throws DataAccessException {
         var content = readFileAsBytes(postPhoto.getPath());
         return new PostPhotoDto(postPhoto.getName(), encode(content));
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deletePostPhotoById(int id) {
+    public void deletePostPhotoById(int id) throws DataAccessException {
         var postPhotoOptional = postPhotoRepository.findById(id);
         if (postPhotoOptional.isPresent()) {
             deleteFile(postPhotoOptional.get().getPath());

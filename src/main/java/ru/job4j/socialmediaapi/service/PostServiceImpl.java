@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
 
     @Override
-    public Optional<PostDto> findById(int id) {
+    public Optional<PostDto> findById(int id) throws DataAccessException {
         Optional<Post> post = postRepository.findById(id);
         if (post.isEmpty()) {
             return Optional.empty();
@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public PostDto createPost(PostDto postDto) throws DataAccessException {
+    public PostDto createPost(PostDto postDto) throws DataAccessException, NoSuchElementException {
         User user = userRepository.findById(postDto.getUserId())
                 .orElseThrow(() -> new NoSuchElementException("User with id " + postDto.getUserId() + " not found"));
         List<PostPhoto> savedPostPhotos = postPhotoService.saveAll(postDto.getPostPhotos());
@@ -63,7 +63,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean deletePostById(int id) throws DataAccessException {
+    public boolean deletePostById(int id) throws DataAccessException, NoSuchElementException {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + id + " not found"));
         post.getPostPhotos().forEach(postPhoto ->

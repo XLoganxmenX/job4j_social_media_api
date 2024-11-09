@@ -10,7 +10,6 @@ import ru.job4j.socialmediaapi.mappers.UserMapper;
 import ru.job4j.socialmediaapi.model.User;
 import ru.job4j.socialmediaapi.repository.UserRepository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,12 +41,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(int id) throws DataAccessException {
         return userRepository.delete(id) > 0;
     }
 
     @Override
-    public List<UserListDto> findAll() {
+    public List<UserListDto> findAll() throws DataAccessException {
         return userRepository.findAll().stream()
                 .map(userMapper::getUserListDtoFromUser)
                 .collect(Collectors.toList());
