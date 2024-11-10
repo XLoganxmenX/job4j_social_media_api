@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import ru.job4j.socialmediaapi.dto.PostDto;
 import ru.job4j.socialmediaapi.dto.PostPhotoDto;
+import ru.job4j.socialmediaapi.mappers.SimplePostDtoMapper;
 import ru.job4j.socialmediaapi.model.Post;
 import ru.job4j.socialmediaapi.model.PostPhoto;
 import ru.job4j.socialmediaapi.model.User;
@@ -38,7 +39,8 @@ class PostServiceImplTest {
         postRepository = mock(PostRepository.class);
         postPhotoService = mock(PostPhotoServiceImpl.class);
         userRepository = mock(UserRepository.class);
-        postService = new PostServiceImpl(postRepository, postPhotoService, userRepository);
+        postService = new PostServiceImpl(postRepository,
+                postPhotoService, userRepository, mock(SimplePostDtoMapper.class));
     }
 
     @Test
