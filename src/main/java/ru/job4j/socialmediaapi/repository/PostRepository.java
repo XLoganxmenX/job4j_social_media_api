@@ -16,6 +16,14 @@ import java.util.List;
 public interface PostRepository extends ListCrudRepository<Post, Integer> {
     List<Post> findByUser(User user);
 
+    @Query("""
+           select p from Post p
+           JOIN FETCH p.user
+           WHERE p.user.id IN :userIds
+           order by p.created desc
+           """)
+    List<Post> findByUserIds(List<Integer> userIds);
+
     List<Post> findByCreatedBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     Page<Post> findByOrderByCreatedDesc(Pageable pageable);

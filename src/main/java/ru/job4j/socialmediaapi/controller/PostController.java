@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.job4j.socialmediaapi.dto.PostDto;
+import ru.job4j.socialmediaapi.dto.UserPostsDto;
 import ru.job4j.socialmediaapi.service.PostService;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -48,5 +51,11 @@ public class PostController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PostMapping("/by-user-ids")
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserPostsDto> getUsersWithPosts(@RequestBody List<Integer> userIds) {
+        return postService.getUserPostsDtosByUserIds(userIds);
     }
 }

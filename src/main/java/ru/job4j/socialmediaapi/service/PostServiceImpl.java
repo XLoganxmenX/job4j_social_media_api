@@ -7,6 +7,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.socialmediaapi.dto.PostDto;
 import ru.job4j.socialmediaapi.dto.PostPhotoDto;
+import ru.job4j.socialmediaapi.dto.SimplePostDto;
+import ru.job4j.socialmediaapi.dto.UserPostsDto;
+import ru.job4j.socialmediaapi.mappers.SimplePostDtoMapper;
 import ru.job4j.socialmediaapi.model.Post;
 import ru.job4j.socialmediaapi.model.PostPhoto;
 import ru.job4j.socialmediaapi.model.User;
@@ -15,9 +18,8 @@ import ru.job4j.socialmediaapi.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,6 +27,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostPhotoService postPhotoService;
     private final UserRepository userRepository;
+    private final SimplePostDtoMapper simplePostDtoMapper;
 
     @Override
     public Optional<PostDto> findById(int id) throws DataAccessException {
@@ -75,5 +78,27 @@ public class PostServiceImpl implements PostService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateTitleAndDescription(String title, String description, int id) throws DataAccessException {
         postRepository.updateTitleAndDescriptionById(title, description, id);
+    }
+
+    @Override
+    public List<UserPostsDto> getUserPostsDtosByUserIds(List<Integer> userIds) {
+        List<Post> posts = postRepository.findByUserIds(userIds);
+        Map<User, List<Post>> usersPosts = posts.stream()
+                .collect(Collectors.groupingBy(Post::getUser));
+        return usersPosts.entrySet().stream()
+                .map(this::mapToUserPostsDto)
+                .collect(Collectors.toList());
+    }
+
+    private UserPostsDto mapToUserPostsDto(Map.Entry<User, List<Post>> entry) {
+        User user = entry.getKey();
+        List<SimplePostDto> simplePostDtos = mapPostsToSimplePostDtos(entry.getValue());
+        return new UserPostsDto(user.getId(), user.getName(), simplePostDtos);
+    }
+
+    private List<SimplePostDto> mapPostsToSimplePostDtos(List<Post> posts) {
+        return posts.stream()
+                .map(simplePostDtoMapper::getSimplePostDtoFromPost)
+                .collect(Collectors.toList());
     }
 }

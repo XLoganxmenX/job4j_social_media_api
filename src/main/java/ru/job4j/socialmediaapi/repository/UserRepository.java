@@ -44,4 +44,9 @@ public interface UserRepository extends ListCrudRepository<User, Integer> {
     List<User> findUsersByRelationTypeForRelatedUserWithoutType(@Param("relatedUserId") int userId,
                                                                  @Param("relationTypeId") int relationTypeId,
                                                                  @Param("withoutTypeId") int withoutTypeId);
+    @Query("""
+            select user from User as user
+            where user.id IN (:userIds)
+            """)
+    List<User> findUsersByIds(@Param("userIds") List<Integer> userIds);
 }
