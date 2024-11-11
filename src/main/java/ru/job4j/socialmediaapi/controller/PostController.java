@@ -1,10 +1,13 @@
 package ru.job4j.socialmediaapi.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.job4j.socialmediaapi.dto.PostDto;
@@ -13,9 +16,11 @@ import ru.job4j.socialmediaapi.service.PostService;
 
 import java.util.List;
 
-@AllArgsConstructor
+
 @RestController
 @RequestMapping("/social-media/post")
+@Validated
+@AllArgsConstructor
 public class PostController {
     private final PostService postService;
 
@@ -30,7 +35,7 @@ public class PostController {
     }
 
     @PostMapping()
-    public ResponseEntity<PostDto> save(@RequestBody PostDto postDto) {
+    public ResponseEntity<PostDto> save(@Valid @RequestBody PostDto postDto) {
         postDto = postService.createPost(postDto);
         var uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -55,7 +60,7 @@ public class PostController {
 
     @PostMapping("/by-user-ids")
     @ResponseStatus(HttpStatus.OK)
-    public List<UserPostsDto> getUsersWithPosts(@RequestBody List<Integer> userIds) {
+    public List<UserPostsDto> getUsersWithPosts(@NotEmpty @RequestBody List<Integer> userIds) {
         return postService.getUserPostsDtosByUserIds(userIds);
     }
 }

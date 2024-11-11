@@ -1,10 +1,12 @@
 package ru.job4j.socialmediaapi.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.job4j.socialmediaapi.dto.UserDto;
@@ -12,6 +14,7 @@ import ru.job4j.socialmediaapi.service.UserService;
 
 @RestController
 @RequestMapping("/social-media/user")
+@Validated
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -27,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> findByEmailAndPassword(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> findByEmailAndPassword(@Valid @RequestBody UserDto userDto) {
         return userService.findByEmailAndPassword(userDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -35,7 +38,7 @@ public class UserController {
 
 
     @PostMapping()
-    public ResponseEntity<UserDto> save(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> save(@Valid @RequestBody UserDto userDto) {
         userDto = userService.save(userDto);
         var uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
