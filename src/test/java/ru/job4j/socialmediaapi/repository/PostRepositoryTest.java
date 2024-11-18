@@ -15,6 +15,7 @@ import ru.job4j.socialmediaapi.model.UserRelate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -39,7 +40,7 @@ class PostRepositoryTest {
     @Test
     public void whenSavePostThenFindById() {
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var post = new Post(0, "title", "description", user, LocalDateTime.now(), List.of());
         postRepository.save(post);
         var actualPost = postRepository.findById(post.getId());
@@ -57,7 +58,7 @@ class PostRepositoryTest {
     @Transactional
     public void whenSavePostAndDeleteThenNotFound() {
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var post1 = new Post(0, "title", "description", user, LocalDateTime.now(), List.of());
         var post2 = new Post(0, "title2", "description2", user, LocalDateTime.now(), List.of());
         postRepository.save(post1);
@@ -70,7 +71,7 @@ class PostRepositoryTest {
     @Test
     public void whenFindAllPostThenGetPostsList() {
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var post1 = postRepository.save(
                 new Post(0, "title1", "description1", user, LocalDateTime.now(), List.of()));
         var post2 = postRepository.save(
@@ -86,7 +87,7 @@ class PostRepositoryTest {
     @Test
     public void whenUpdatePostAndSaveThenFindById() {
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var post = postRepository.save(
                 new Post(0, "title1", "description1", user, LocalDateTime.now(), List.of()));
         post.setTitle("new title");
@@ -108,7 +109,7 @@ class PostRepositoryTest {
     @Test
     public void whenFindPostByUserThenGetUsersPostList() {
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var userPost1 = postRepository.save(
                 new Post(0, "title1", "description1", user, LocalDateTime.now(), List.of()));
         var userPost2 = postRepository.save(
@@ -116,7 +117,8 @@ class PostRepositoryTest {
         var expectedPosts = List.of(userPost1, userPost2);
 
         var anotherUser = userRepository.save(
-                new User(0, "another user", "anothertest@test.com", "another test", "UTC", List.of()));
+                new User(0, "another user", "anothertest@test.com",
+                        "another test", "UTC", List.of(), Set.of()));
         var anotherUserPost = postRepository.save(
                 new Post(0, "another title", "another description", anotherUser, LocalDateTime.now(), List.of()));
 
@@ -131,7 +133,7 @@ class PostRepositoryTest {
     public void whenFindPostByCreatedBetweenThenGetMonthPostList() {
         var today = LocalDateTime.now();
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var userMatchingPost1 = postRepository.save(
                 new Post(0, "title1", "description1", user, today.minusDays(5), List.of()));
         var userMatchingPost2 = postRepository.save(
@@ -140,7 +142,8 @@ class PostRepositoryTest {
                 new Post(0, "title3", "description3", user, today.minusMonths(6), List.of()));
 
         var anotherUser = userRepository.save(
-                new User(0, "another user", "anothertest@test.com", "another test", "UTC", List.of()));
+                new User(0, "another user", "anothertest@test.com",
+                        "another test", "UTC", List.of(), Set.of()));
         var anotherUserMatchingPost = postRepository.save(
                 new Post(0, "another title", "another description", anotherUser, today.minusHours(1), List.of()));
         var expectedPosts = List.of(userMatchingPost1, userMatchingPost2, anotherUserMatchingPost);
@@ -156,7 +159,7 @@ class PostRepositoryTest {
     public void whenFindPostOrderByCreatedDescThenGetDescOrderPostList() {
         var today = LocalDateTime.now();
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var userPost1 = postRepository.save(
                 new Post(0, "title1", "description1", user, today.minusDays(5), List.of()));
         var userPost2 = postRepository.save(
@@ -176,7 +179,7 @@ class PostRepositoryTest {
     @Transactional
     public void whenUpdateTitleAndDescThenPostUpdated() {
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var post1 = postRepository.save(
                 new Post(0, "title1", "description1", user, LocalDateTime.now(), List.of()));
         var post2 = postRepository.save(
@@ -196,15 +199,15 @@ class PostRepositoryTest {
     public void whenFindUsersByRelationTypeForUser() {
         var today = LocalDateTime.now();
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", new ArrayList<>()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", new ArrayList<>(), Set.of()));
         var userPost = postRepository.save(
                 new Post(0, "title1", "description1", user, today, List.of()));
         var relateUser2 = userRepository.save(
-                new User(0, "user2", "tes2t@test.com", "test2", "UTC", List.of()));
+                new User(0, "user2", "tes2t@test.com", "test2", "UTC", List.of(), Set.of()));
         var relateUser2Post = postRepository.save(
                 new Post(0, "relateUser2 title", "relateUser2 description", relateUser2, today.minusDays(10), List.of()));
         var relateUser3 = userRepository.save(
-                new User(0, "user3", "tes3t@test.com", "test3", "UTC", List.of()));
+                new User(0, "user3", "tes3t@test.com", "test3", "UTC", List.of(), Set.of()));
         var relateUser3Post = postRepository.save(
                 new Post(0, "relateUser3 title", "relateUser3 description", relateUser3, today.minusHours(1), List.of()));
         var subscriberType = relationTypeRepository.save(new RelationType(0, "subscriber"));

@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -92,6 +93,7 @@ public class PostController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())})
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id")
                                        @NotNull
                                        @Min(value = 1, message = "Номер ресурса должен быть больше 0")

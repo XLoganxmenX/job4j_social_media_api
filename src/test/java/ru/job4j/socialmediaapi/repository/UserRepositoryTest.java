@@ -12,6 +12,7 @@ import ru.job4j.socialmediaapi.model.UserRelate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -32,7 +33,7 @@ class UserRepositoryTest {
 
     @Test
     public void whenSaveUserThenFindById() {
-        var user = new User(0, "user", "test@test.com", "test", "UTC", List.of());
+        var user = new User(0, "user", "test@test.com", "test", "UTC", List.of(), Set.of());
         userRepository.save(user);
         var actualUser = userRepository.findById(user.getId());
         assertThat(actualUser).isPresent();
@@ -47,7 +48,7 @@ class UserRepositoryTest {
 
     @Test
     public void whenSaveUserAndDeleteThenNotFound() {
-        var user = new User(0, "user", "test@test.com", "test", "UTC", List.of());
+        var user = new User(0, "user", "test@test.com", "test", "UTC", List.of(), Set.of());
         userRepository.save(user);
         userRepository.deleteById(user.getId());
         var actualUser = userRepository.findById(user.getId());
@@ -58,14 +59,15 @@ class UserRepositoryTest {
     @Test
     public void whenFindAllUsersThenGetUsersList() {
         var user1 = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", List.of(), Set.of()));
         var user2 = userRepository.save(
-                new User(0, "user2", "test2@test.com", "test2", "UTC", List.of()));
+                new User(0, "user2", "test2@test.com", "test2", "UTC", List.of(), Set.of()));
         var expectedUsers = List.of(user1, user2);
         var actualUsers = userRepository.findAll();
         assertThat(actualUsers).hasSize(2);
         assertThat(actualUsers).usingRecursiveComparison()
                 .ignoringFields("userRelates")
+                .ignoringFields("roles")
                 .isEqualTo(expectedUsers);
     }
 
@@ -79,9 +81,9 @@ class UserRepositoryTest {
     @Transactional
     public void whenSaveUserWithRelateThenFindRelate() {
         var user = userRepository.save(
-                new User(0, "user1", "test1@test.com", "test1", "UTC", new ArrayList<>()));
+                new User(0, "user1", "test1@test.com", "test1", "UTC", new ArrayList<>(), Set.of()));
         var relateUser = userRepository.save(
-                new User(0, "user2", "tes2t@test.com", "test2", "UTC", List.of()));
+                new User(0, "user2", "tes2t@test.com", "test2", "UTC", List.of(), Set.of()));
         var friendType = relationTypeRepository.save(new RelationType(0, "friend"));
         user.getUserRelates().add(
                 new UserRelate(0, user, relateUser, friendType)
@@ -97,13 +99,15 @@ class UserRepositoryTest {
     @Test
     public void whenFindUserByEmailAndPasswordThenGetUser() {
         var user = userRepository.save(
-                new User(0, "user", "test@test.com", "test", "UTC", new ArrayList<>()));
+                new User(0, "user", "test@test.com", "test", "UTC", new ArrayList<>(), Set.of()));
         var anotherUser = userRepository.save(
-                new User(0, "another user", "anothertest@test.com", "test", "UTC", new ArrayList<>()));
+                new User(0, "another user", "anothertest@test.com",
+                        "test", "UTC", new ArrayList<>(), Set.of()));
         var actualUser = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
         assertThat(actualUser).isPresent();
         assertThat(actualUser.get()).usingRecursiveComparison()
                 .ignoringFields("userRelates")
+                .ignoringFields("roles")
                 .isEqualTo(user);
     }
 
@@ -111,11 +115,11 @@ class UserRepositoryTest {
     @Transactional
     public void whenFindRelatedUsersByRelationTypeForUser() {
         var user = userRepository.save(
-                new User(0, "user", "test@test.com", "test", "UTC", new ArrayList<>()));
+                new User(0, "user", "test@test.com", "test", "UTC", new ArrayList<>(), Set.of()));
         var relateUser2 = userRepository.save(
-                new User(0, "user2", "tes2t@test.com", "test2", "UTC", List.of()));
+                new User(0, "user2", "tes2t@test.com", "test2", "UTC", List.of(), Set.of()));
         var relateUser3 = userRepository.save(
-                new User(0, "user3", "tes3t@test.com", "test3", "UTC", List.of()));
+                new User(0, "user3", "tes3t@test.com", "test3", "UTC", List.of(), Set.of()));
         var friendType = relationTypeRepository.save(new RelationType(0, "friend"));
 
         user.getUserRelates()
@@ -135,11 +139,14 @@ class UserRepositoryTest {
     @Transactional
     public void whenFindUsersByRelationTypeForRelatedUserWithoutType() {
         var relateUser = userRepository.save(
-                new User(0, "relateUser", "test@test.com", "test", "UTC", new ArrayList<>()));
+                new User(0, "relateUser", "test@test.com",
+                        "test", "UTC", new ArrayList<>(), Set.of()));
         var user1 = userRepository.save(
-                new User(0, "user2", "tes2t@test.com", "test2", "UTC", new ArrayList<>()));
+                new User(0, "user2", "tes2t@test.com",
+                        "test2", "UTC", new ArrayList<>(), Set.of()));
         var user2 = userRepository.save(
-                new User(0, "user3", "tes3t@test.com", "test3", "UTC", new ArrayList<>()));
+                new User(0, "user3", "tes3t@test.com",
+                        "test3", "UTC", new ArrayList<>(), Set.of()));
         var subscriberType = relationTypeRepository.save(new RelationType(0, "subscriber"));
         var friendType = relationTypeRepository.save(new RelationType(0, "friend"));
 

@@ -20,4 +20,7 @@
     <include file="scripts/013_dml_insert_table_relation_types.xml" relativeToChangelogFile="true"/>
     <include file="scripts/014_ddl_change_constraint_table_users_friendships.xml" relativeToChangelogFile="true"/>
     <include file="scripts/015_dml_drop_null_constraint_table_post_photos.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/016_ddl_create_table_roles.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/017_ddl_create_table_users_roles.xml" relativeToChangelogFile="true"/>
+    <include file="scripts/018_dml_insert_table_roles.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

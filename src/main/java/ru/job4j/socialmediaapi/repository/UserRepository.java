@@ -49,4 +49,10 @@ public interface UserRepository extends ListCrudRepository<User, Integer> {
             where user.id IN (:userIds)
             """)
     List<User> findUsersByIds(@Param("userIds") List<Integer> userIds);
+
+    Optional<User> findByName(String name);
+
+    Boolean existsByName(String name);
+
+    Boolean existsByEmail(String email);
 }

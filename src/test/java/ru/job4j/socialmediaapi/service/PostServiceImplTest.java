@@ -19,6 +19,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,7 +48,7 @@ class PostServiceImplTest {
     public void whenCreatePostThenGetNewPost() {
         var postPhotoDtos = List.of(new PostPhotoDto("photo1", "content"));
         var postPhotos = List.of(new PostPhoto(1, "photo1", "path"));
-        var user = new User(1, "user", "test@test.com", "test", "UTC", new ArrayList<>());
+        var user = new User(1, "user", "test@test.com", "test", "UTC", new ArrayList<>(), Set.of());
         var post = new Post(
                 1,
                 "title",
@@ -72,7 +73,7 @@ class PostServiceImplTest {
     public void whenCreatePostAndGetExceptionThenThrowException() {
         var postPhotoDtos = List.of(new PostPhotoDto("photo1", "content"));
         var postPhotos = List.of(new PostPhoto(1, "photo1", "path"));
-        var user = new User(1, "user", "test@test.com", "test", "UTC", new ArrayList<>());
+        var user = new User(1, "user", "test@test.com", "test", "UTC", new ArrayList<>(), Set.of());
         var post = new Post(
                 1,
                 "title",

@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -51,26 +52,6 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Найти пользователя по его email и паролю",
-            description = """
-                        Получить объект UserDto по его email и паролю, отправив заполненный объект UserDto с 0 id.
-                        Ответом возвращается объект UserDto с полями id, name, email и password.
-                        """,
-            tags = { "User", "find" })
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
-                    @Content(schema = @Schema(implementation = User.class), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "404", content = {
-                    @Content(schema = @Schema())})
-    })
-    @PostMapping("/login")
-    public ResponseEntity<UserDto> findByEmailAndPassword(@Valid @RequestBody UserDto userDto) {
-        return userService.findByEmailAndPassword(userDto)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @Operation(
             summary = "Сохранить пользователя",
             description = """
                         Сохранить пользователя, отправив заполненный объект UserDto с 0 id.
@@ -104,7 +85,9 @@ public class UserController {
             @ApiResponse(responseCode = "204", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())})
     })
+
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable("id")
                                        @NotNull
                                        @Min(value = 1, message = "Номер ресурса должен быть больше 1")
